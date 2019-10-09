@@ -51,8 +51,16 @@ bool checkOrder(const std::vector<int>& order,
 }
 
 int main(int argc, const char * argv[]) {
-
+    
     /* A IMPLEMENTER */
+    SymbolGraph<DiGraph> SG("prerequis.txt", ',');
+
+    TopologicalSort<DiGraph> TS(SG.G());
+    const vector<int>& order = TS.Order();
+
+    for(int i : order){
+        cout << SG.symbol(i) << endl;
+    }
 
     return EXIT_SUCCESS;
 }

@@ -16,22 +16,27 @@
 #include <vector>
 #include <exception>
 
+#include "ParcoursEnProfondeur.h"
+
 template < typename GraphType >
 class TopologicalSort {
 private:
 	/* A DEFINIR */
-    
+    DFS<GraphType> DFS;
+    std::vector<int> order;
 public:
     //constructeur
-    TopologicalSort(const GraphType & g) {
+    TopologicalSort(const GraphType & g) : DFS(g) {
         /* A IMPLEMENTER */
+
         /* vous devez verifier la presence d'un cycle, auquel cas il faut lancer une  GraphNotDAGException*/
     }
     
     //tableau contenant l'ordre de parcours des indexes des sommets dans le graphe
     const std::vector<int>& Order() {
         /* A IMPLEMENTER */
-        //return ...
+        DFS.visitGraph([](int){}, [&](int v){order.push_back(v); /*order.insert(order.begin(), v); // Inversé?*/});
+        return order;
     }
     
     //exception si le graphe n'est pas un DAG (Directed Acyclic Graph)
