@@ -50,17 +50,44 @@ bool checkOrder(const std::vector<int>& order,
     return ok;
 }
 
-int main(int argc, const char * argv[]) {
-    
-    /* A IMPLEMENTER */
+void testTriTopologique(string fileName, char delimiter) {
     SymbolGraph<DiGraph> SG("prerequis.txt", ',');
 
-    TopologicalSort<DiGraph> TS(SG.G());
-    const vector<int>& order = TS.Order();
+    try {
+        // Tri topologique
+        TopologicalSort<DiGraph> ts(SG.G());
+        const vector<int>& order = ts.Order();
 
-    for(int i : order){
-        cout << SG.symbol(i) << endl;
+        // Affichage tri
+        cout << fileName << " est un DAG" << endl << "Ordre topologique:" << endl;
+        for(int i : order){
+            cout << SG.symbol(i) << " ";
+        }
+        cout << endl;
+
+        // Vérification
+        if(checkOrder(order, SG, fileName, delimiter)) {
+            cout << "Verification reussie" << endl;
+        } else {
+            cout << "Verification echouee" << endl;
+        }
+    } catch(TopologicalSort<DiGraph>::GraphNotDAGException& e) {
+        // Cycle trouvé -> afficher
+        cout << fileName << " n'est pas un DAG" << endl << "Cycle trouve:" << endl;
+        for(int v : e.Cycle()) {
+            cout << v << " ";
+        }
+        cout << endl;
     }
+}
+
+int main(int argc, const char * argv[]) {
+    /* A IMPLEMENTER */
+    const char DELIMITER = ',';
+
+    testTriTopologique("prerequis.txt", DELIMITER);
+    cout << endl;
+    testTriTopologique("prerequis2.txt", DELIMITER);
 
     return EXIT_SUCCESS;
 }

@@ -29,7 +29,10 @@ public:
     TopologicalSort(const GraphType & g) : dfs(g) {
         /* A IMPLEMENTER */
 
-        /* vous devez verifier la presence d'un cycle, auquel cas il faut lancer une  GraphNotDAGException*/
+        // Lancer une exception si un cycle est trouvé dans le graphe
+        DirectedCycle<GraphType> dc(g);
+        if(dc.HasCycle())
+            throw GraphNotDAGException(dc.Cycle());
     }
     
     //tableau contenant l'ordre de parcours des indexes des sommets dans le graphe
