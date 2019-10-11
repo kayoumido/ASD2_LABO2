@@ -22,6 +22,8 @@ private:
     std::vector<bool> marked;
     std::vector<bool> stacked;
     bool cycleFound;
+    Vertex endOfCycle;
+    std::list<Vertex> cycle;
 
     void cycleDetection(Vertex v) {
         marked.at(v) = true;
@@ -34,9 +36,21 @@ private:
                 cycleDetection(w);
             } else if (stacked.at(w)) {
                 cycleFound = true;
+                endOfCycle = w;
+                cycle.push_back(w);
             }
         }
-        stacked.at(v) = false;
+
+        if(!cycleFound) {
+            stacked.at(v) = false;
+        }else{
+            if (endOfCycle != -1) {
+                cycle.push_back(v);
+                if (endOfCycle == v){
+                    endOfCycle = -1;
+                }
+            }
+        }
     }
 
 public:
@@ -45,11 +59,15 @@ public:
         marked.resize(g.V());
         stacked.resize(g.V());
         cycleFound = false;
+        endOfCycle = -1;
     }
 
     //indique la presence d'un cycle
     bool HasCycle() {
-        for (int i = 0; i < g.V(); ++i) {
+        for (int i = 0; i < stacked.size(); ++i) {
+            if(cycleFound){
+                break;
+            }
             cycleDetection(i);
         }
 
@@ -58,8 +76,8 @@ public:
 
     //liste les indexes des sommets formant une boucle
     std::list<int> Cycle() {
-        /* A IMPLEMENTER */
-        //return ...
+        cycle.reverse();
+        return cycle;
     }
 
 };

@@ -51,7 +51,7 @@ bool checkOrder(const std::vector<int>& order,
 }
 
 void testTriTopologique(string fileName, char delimiter) {
-    SymbolGraph<DiGraph> SG("prerequis.txt", ',');
+    SymbolGraph<DiGraph> SG(fileName, delimiter);
 
     try {
         // Tri topologique
@@ -75,7 +75,7 @@ void testTriTopologique(string fileName, char delimiter) {
         // Cycle trouvé -> afficher
         cout << fileName << " n'est pas un DAG" << endl << "Cycle trouve:" << endl;
         for(int v : e.Cycle()) {
-            cout << v << " ";
+            cout << SG.symbol(v) << " ";
         }
         cout << endl;
     }
@@ -84,10 +84,10 @@ void testTriTopologique(string fileName, char delimiter) {
 int main(int argc, const char * argv[]) {
     /* A IMPLEMENTER */
     const char DELIMITER = ',';
-
     testTriTopologique("prerequis.txt", DELIMITER);
     cout << endl;
     testTriTopologique("prerequis2.txt", DELIMITER);
+
 
     return EXIT_SUCCESS;
 }
