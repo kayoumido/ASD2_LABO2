@@ -10,29 +10,58 @@
 #ifndef ASD2_DirectedCycle_h
 #define ASD2_DirectedCycle_h
 
+#include <vector>
+#include <algorithm>
+
+typedef int Vertex;
+
 template<typename GraphType>
 class DirectedCycle {
 private:
-	/* A DEFINIR */
-	
+    const GraphType& g;
+    std::vector<bool> marked;
+    std::vector<bool> stacked;
+    bool cycleFound;
+
+    void cycleDetection(Vertex v) {
+        marked.at(v) = true;
+        stacked.at(v) = true;
+
+        for (auto w : g.adjacent(v)) {
+            if (cycleFound) {
+                return;
+            } else if (!marked.at(w)) {
+                cycleDetection(w);
+            } else if (stacked.at(w)) {
+                cycleFound = true;
+            }
+        }
+        stacked.at(v) = false;
+    }
+
 public:
-	//constructeur
-	DirectedCycle(const GraphType& g) {
-		/* A IMPLEMENTER */
-	}
-	
-	//indique la presence d'un cycle
-	bool HasCycle() {
-		/* A IMPLEMENTER */
-		//return ...
-	}
-	
-	//liste les indexes des sommets formant une boucle
-	std::list<int> Cycle() {
-		/* A IMPLEMENTER */
-		//return ...
-	}
-	
+    //constructeur
+    DirectedCycle(const GraphType &G) : g(G) {
+        marked.resize(g.V());
+        stacked.resize(g.V());
+        cycleFound = false;
+    }
+
+    //indique la presence d'un cycle
+    bool HasCycle() {
+        for (int i = 0; i < g.V(); ++i) {
+            cycleDetection(i);
+        }
+
+        return cycleFound;
+    }
+
+    //liste les indexes des sommets formant une boucle
+    std::list<int> Cycle() {
+        /* A IMPLEMENTER */
+        //return ...
+    }
+
 };
 
 #endif
