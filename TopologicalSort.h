@@ -22,11 +22,11 @@ template < typename GraphType >
 class TopologicalSort {
 private:
 	/* A DEFINIR */
-    DFS<GraphType> DFS;
+    DFSIter<GraphType> dfs;
     std::vector<int> order;
 public:
     //constructeur
-    TopologicalSort(const GraphType & g) : DFS(g) {
+    TopologicalSort(const GraphType & g) : dfs(g) {
         /* A IMPLEMENTER */
 
         /* vous devez verifier la presence d'un cycle, auquel cas il faut lancer une  GraphNotDAGException*/
@@ -35,7 +35,7 @@ public:
     //tableau contenant l'ordre de parcours des indexes des sommets dans le graphe
     const std::vector<int>& Order() {
         /* A IMPLEMENTER */
-        DFS.visitGraph([](int){}, [&](int v){order.push_back(v); /*order.insert(order.begin(), v); // Inversé?*/});
+        dfs.visitGraph([](int){}, [&](int v){order.push_back(v); /*order.insert(order.begin(), v); // Inversé?*/});
         return order;
     }
     
