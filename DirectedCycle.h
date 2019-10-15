@@ -25,6 +25,11 @@ private:
     Vertex endOfCycle;
     std::list<Vertex> cycle;
 
+    /**
+     * @brief Launch a cycle detection from a specific Vertex.
+     *        O(v + e)   v=vertex e=edge
+     * @param v The Vertex from which we want to detect a cycle
+     */
     void cycleDetection(Vertex v) {
         marked.at(v) = true;
         stacked.at(v) = true;
@@ -62,9 +67,14 @@ public:
         endOfCycle = -1;
     }
 
-    //indique la presence d'un cycle
+    /**
+     * @brief Check if the Graph contains a cycle
+     *        O(v)   v=vertex
+     * @return True if the Graph contains a cycle, false otherwise
+     */
     bool HasCycle() {
-        for (int i = 0; i < stacked.size(); ++i) {
+        // Launch (if no cycle already found) the cycle detection from each vertex
+        for (int i = 0; i < g.V(); ++i) {
             if(cycleFound){
                 break;
             }
@@ -74,7 +84,11 @@ public:
         return cycleFound;
     }
 
-    //liste les indexes des sommets formant une boucle
+    /**
+     * @breief Return the vertexes list of the cycle
+     *         O(n)
+     * @return A list contains each vertex in the cycle
+     */
     std::list<int> Cycle() {
         cycle.reverse();
         return cycle;
