@@ -22,7 +22,7 @@ private:
     std::vector<bool> marked;
     std::vector<bool> stacked;
     bool cycleFound;
-    Vertex endOfCycle;
+    Vertex endOfCycle; // The vertex that is the end (also begin) of the cycle
     std::list<Vertex> cycle;
 
     /**
@@ -34,12 +34,18 @@ private:
         marked.at(v) = true;
         stacked.at(v) = true;
 
+        // Loop trough adjacent of the current vertex
         for (auto w : g.adjacent(v)) {
+            // Cycle found, stop the detection and go out the recursion call
             if (cycleFound) {
                 return;
-            } else if (!marked.at(w)) {
+            }
+            // Not already marked -> launch the cycle detection for the current adjacent vertex
+            else if (!marked.at(w)) {
                 cycleDetection(w);
-            } else if (stacked.at(w)) {
+            }
+            // Vertex already appears in the stacked vector -> cycle detected
+            else if (stacked.at(w)) {
                 cycleFound = true;
                 endOfCycle = w;
                 cycle.push_back(w);
@@ -49,8 +55,11 @@ private:
         if(!cycleFound) {
             stacked.at(v) = false;
         }else{
+            // We know the end of cycle
             if (endOfCycle != -1) {
+                // We can push the current vertex to our list, to recreate the cycle
                 cycle.push_back(v);
+                // The current vertex is the same vertex as the end of cycle => we reached the end of the cycle
                 if (endOfCycle == v){
                     endOfCycle = -1;
                 }
@@ -65,6 +74,14 @@ public:
         stacked.resize(g.V());
         cycleFound = false;
         endOfCycle = -1;
+
+        // Launch (if no cycle already found) the cycle detection from each vertex
+        for (int i = 0; i < g.V(); ++i) {
+            if(cycleFound){
+                break;
+            }
+            cycleDetection(i);
+        }
     }
 
     /**
@@ -73,20 +90,13 @@ public:
      * @return True if the Graph contains a cycle, false otherwise
      */
     bool HasCycle() {
-        // Launch (if no cycle already found) the cycle detection from each vertex
-        for (int i = 0; i < g.V(); ++i) {
-            if(cycleFound){
-                break;
-            }
-            cycleDetection(i);
-        }
-
         return cycleFound;
     }
 
     /**
-     * @breief Return the vertexes list of the cycle
-     *         O(n)
+     * @brief Return the vertexes list of the cycle
+     *         O(n) Because we have a display following the arrows direction of the cycle (a -> b -> c -> a)
+     *         ( O(1) if we decide to remove the reverse and only display the vertex contains in the cycle)
      * @return A list contains each vertex in the cycle
      */
     std::list<int> Cycle() {
