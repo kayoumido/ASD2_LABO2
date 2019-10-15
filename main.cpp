@@ -1,6 +1,7 @@
 /*
  * File:   DFSOrder.h
  * Author: Cuisenaire
+ * Modified by: Robin Demarta, Loïc Dessaules, Doran Kayoumi
  * Labo 2
  * Created on 3. novembre 2014, 08:23
  */
@@ -50,29 +51,34 @@ bool checkOrder(const std::vector<int>& order,
     return ok;
 }
 
+/**
+ * @brief Tests the topological sort and cycle detection functions
+ * @param fileName Path to the file containing the graph
+ * @param delimiter Character that separates the vertices in the file
+ */
 void testTriTopologique(string fileName, char delimiter) {
     SymbolGraph<DiGraph> SG(fileName, delimiter);
 
     try {
-        // Tri topologique
+        // Topological sort
         TopologicalSort<DiGraph> ts(SG.G());
         const vector<int>& order = ts.Order();
 
-        // Affichage tri
+        // Topological sort display
         cout << fileName << " est un DAG" << endl << "Ordre topologique:" << endl;
         for(int i : order){
             cout << SG.symbol(i) << " ";
         }
         cout << endl;
 
-        // Vérification
+        // Verification using the checkOrder function
         if(checkOrder(order, SG, fileName, delimiter)) {
             cout << "Verification reussie" << endl;
         } else {
             cout << "Verification echouee" << endl;
         }
     } catch(TopologicalSort<DiGraph>::GraphNotDAGException& e) {
-        // Cycle trouvé -> afficher
+        // Cycle found -> display
         cout << fileName << " n'est pas un DAG" << endl << "Cycle trouve:" << endl;
         for(int v : e.Cycle()) {
             cout << SG.symbol(v) << " ";
@@ -84,9 +90,9 @@ void testTriTopologique(string fileName, char delimiter) {
 int main(int argc, const char * argv[]) {
     /* A IMPLEMENTER */
     const char DELIMITER = ',';
-    testTriTopologique("prerequis.txt", DELIMITER);
+    testTriTopologique("prerequis.txt", DELIMITER); // Test topological sort and cycle detection on a graph without cycles
     cout << endl;
-    testTriTopologique("prerequis2.txt", DELIMITER);
+    testTriTopologique("prerequis2.txt", DELIMITER); // Test topological sort and cycle detection on a graph with cycles
 
 
     return EXIT_SUCCESS;

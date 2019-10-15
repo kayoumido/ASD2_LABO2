@@ -1,6 +1,7 @@
 /*
  * File:   TopologicalSort.h
  * Author: Olivier Cuisenaire
+ * Modified by: Robin Demarta, Loïc Dessaules, Doran Kayoumi
  *
  * Created on 08. octobre 2014, 14:07
  *
@@ -25,20 +26,27 @@ private:
     DFSIter<GraphType> dfs;
     std::vector<int> order;
 public:
-    //constructeur
+    /**
+     * @brief Creates the DFS object and checks if the graph has cycle
+     *        O(v)   v=vertex
+     * @param g The graph on which the topological sort will be operated
+     */
     TopologicalSort(const GraphType & g) : dfs(g) {
         /* A IMPLEMENTER */
-
-        // Lancer une exception si un cycle est trouvé dans le graphe
+        // Throw an exception if a cycle is found in the graph
         DirectedCycle<GraphType> dc(g);
         if(dc.HasCycle())
             throw GraphNotDAGException(dc.Cycle());
     }
-    
-    //tableau contenant l'ordre de parcours des indexes des sommets dans le graphe
+
+    /**
+     * @brief Gets the topological order of the vertices
+     *        O(v + e)   v=vertex e=edge
+     * @return A vector containing the vertices
+     */
     const std::vector<int>& Order() {
         /* A IMPLEMENTER */
-        dfs.visitGraph([](int){}, [&](int v){order.push_back(v); /*order.insert(order.begin(), v); // Inversé?*/});
+        dfs.visitGraph([](int){}, [&](int v){order.push_back(v);});
         return order;
     }
     
