@@ -82,6 +82,9 @@ public:
             }
             cycleDetection(i);
         }
+
+        // We decided to reverse the list to have a display following the arrows direction of the cycle (a -> b -> c -> a)
+        cycle.reverse();
     }
 
     /**
@@ -95,12 +98,10 @@ public:
 
     /**
      * @brief Return the vertexes list of the cycle
-     *         O(n) Because we have a display following the arrows direction of the cycle (a -> b -> c -> a)
-     *         ( O(1) if we decide to remove the reverse and only display the vertex contains in the cycle)
+     *        O(1)
      * @return A list contains each vertex in the cycle
      */
     std::list<int> Cycle() {
-        cycle.reverse();
         return cycle;
     }
 
