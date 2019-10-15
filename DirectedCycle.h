@@ -1,6 +1,8 @@
 /*
  * File:   DirectedCycle.h
  * Author: Olivier Cuisenaire
+ * Modified by: Robin Demarta, Loïc Dessaules, Doran Kayoumi
+ *
  * Created on 08. octobre 2014, 10:46
  *
  * A implementer
