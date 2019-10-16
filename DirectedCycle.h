@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <list>
 
 typedef int Vertex;
 
