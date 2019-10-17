@@ -17,13 +17,13 @@
 using namespace std;
 
 //methode permettant de verifier le graphe trie par rapport au fichier d'entree
-bool checkOrder(const std::vector<int>& order,
-                const SymbolGraph<DiGraph>& SG,
-                const std::string& filename,
+bool checkOrder(const std::vector<int> &order,
+                const SymbolGraph<DiGraph> &SG,
+                const std::string &filename,
                 char delim) {
 
     std::vector<int> positionInOrder(order.size());
-    for( size_t i = 0; i < order.size(); ++i )
+    for (size_t i = 0; i < order.size(); ++i)
         positionInOrder[order[i]] = int(i);
 
     bool ok = true;
@@ -31,16 +31,15 @@ bool checkOrder(const std::vector<int>& order,
     std::string line;
 
     std::ifstream s(filename);
-    while (std::getline(s, line))
-    {
-        auto names = split(line,delim);
+    while (std::getline(s, line)) {
+        auto names = split(line, delim);
 
-        for(size_t i = 1; i < names.size(); ++i) {
+        for (size_t i = 1; i < names.size(); ++i) {
 
             int v = SG.index(names[0]); // module
             int w = SG.index(names[i]); // ieme prerequis
 
-            if ( positionInOrder[ v ] < positionInOrder [ w ]) {
+            if (positionInOrder[v] < positionInOrder[w]) {
                 cout << "Erreur d'ordre : " << names[0] << " avant " << names[i] << endl;
                 ok = false;
             }
@@ -62,38 +61,38 @@ void testTriTopologique(string fileName, char delimiter) {
     try {
         // Topological sort
         TopologicalSort<DiGraph> ts(SG.G());
-        const vector<int>& order = ts.Order();
+        const vector<int> &order = ts.Order();
 
         // Topological sort display
         cout << fileName << " est un DAG" << endl << "Ordre topologique:" << endl;
-        for(int i : order){
+        for (int i : order) {
             cout << SG.symbol(i) << " ";
         }
         cout << endl;
 
         // Verification using the checkOrder function
-        if(checkOrder(order, SG, fileName, delimiter)) {
+        if (checkOrder(order, SG, fileName, delimiter)) {
             cout << "Verification reussie" << endl;
         } else {
             cout << "Verification echouee" << endl;
         }
-    } catch(TopologicalSort<DiGraph>::GraphNotDAGException& e) {
+    } catch (TopologicalSort<DiGraph>::GraphNotDAGException &e) {
         // Cycle found -> display
         cout << fileName << " n'est pas un DAG" << endl << "Cycle trouve:" << endl;
-        for(int v : e.Cycle()) {
+        for (int v : e.Cycle()) {
             cout << SG.symbol(v) << " ";
         }
         cout << endl;
     }
 }
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char *argv[]) {
     /* A IMPLEMENTER */
     const char DELIMITER = ',';
-    testTriTopologique("prerequis.txt", DELIMITER); // Test topological sort and cycle detection on a graph without cycles
+    testTriTopologique("prerequis.txt",
+                       DELIMITER); // Test topological sort and cycle detection on a graph without cycles
     cout << endl;
     testTriTopologique("prerequis2.txt", DELIMITER); // Test topological sort and cycle detection on a graph with cycles
-
 
     return EXIT_SUCCESS;
 }

@@ -21,11 +21,14 @@ typedef int Vertex;
 template<typename GraphType>
 class DirectedCycle {
 private:
-    const GraphType& g;
+    const GraphType &g;
     std::vector<bool> marked;
     std::vector<bool> stacked;
+
     bool cycleFound;
-    Vertex endOfCycle; // The vertex that is the end (also begin) of the cycle
+
+    // The vertex that is the end (also begin) of the cycle
+    Vertex endOfCycle;
     std::list<Vertex> cycle;
 
     /**
@@ -39,6 +42,7 @@ private:
 
         // Loop trough adjacent of the current vertex
         for (auto w : g.adjacent(v)) {
+
             // Cycle found, stop the detection and go out the recursion call
             if (cycleFound) {
                 return;
@@ -55,32 +59,28 @@ private:
             }
         }
 
-        if(!cycleFound) {
+        if (!cycleFound) {
             stacked.at(v) = false;
-        }else{
-            // We know the end of cycle
-            if (endOfCycle != -1) {
-                // We can push the current vertex to our list, to recreate the cycle
-                cycle.push_back(v);
-                // The current vertex is the same vertex as the end of cycle => we reached the end of the cycle
-                if (endOfCycle == v){
-                    endOfCycle = -1;
-                }
+            return;
+        }
+
+        // We know the end of cycle
+        if (endOfCycle != -1) {
+            // We can push the current vertex to our list, to recreate the cycle
+            cycle.push_back(v);
+            // The current vertex is the same vertex as the end of cycle => we reached the end of the cycle
+            if (endOfCycle == v) {
+                endOfCycle = -1;
             }
         }
     }
 
 public:
-    //constructeur
-    DirectedCycle(const GraphType &G) : g(G) {
-        marked.resize(g.V());
-        stacked.resize(g.V());
-        cycleFound = false;
-        endOfCycle = -1;
+    DirectedCycle(const GraphType &G) : g(G), marked(g.V()), stacked(g.V()), cycleFound(false), endOfCycle(-1) {
 
         // Launch (if no cycle already found) the cycle detection from each vertex
         for (int i = 0; i < g.V(); ++i) {
-            if(cycleFound){
+            if (cycleFound) {
                 break;
             }
             cycleDetection(i);

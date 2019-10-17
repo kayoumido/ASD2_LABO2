@@ -19,10 +19,10 @@
 
 #include "ParcoursEnProfondeur.h"
 
-template < typename GraphType >
+template<typename GraphType>
 class TopologicalSort {
 private:
-	/* A DEFINIR */
+    /* A DEFINIR */
     DFSIter<GraphType> dfs;
     std::vector<int> order;
 public:
@@ -31,11 +31,11 @@ public:
      *        O(v)   v=vertex
      * @param g The graph on which the topological sort will be operated
      */
-    TopologicalSort(const GraphType & g) : dfs(g) {
+    TopologicalSort(const GraphType &g) : dfs(g) {
         /* A IMPLEMENTER */
         // Throw an exception if a cycle is found in the graph
         DirectedCycle<GraphType> dc(g);
-        if(dc.HasCycle())
+        if (dc.HasCycle())
             throw GraphNotDAGException(dc.Cycle());
     }
 
@@ -44,29 +44,29 @@ public:
      *        O(v + e)   v=vertex e=edge
      * @return A vector containing the vertices
      */
-    const std::vector<int>& Order() {
+    const std::vector<int> &Order() {
         /* A IMPLEMENTER */
-        dfs.visitGraph([](int){}, [&](int v){order.push_back(v);});
+        dfs.visitGraph([](int) {}, [&](int v) { order.push_back(v); });
         return order;
     }
-    
+
     //exception si le graphe n'est pas un DAG (Directed Acyclic Graph)
     class GraphNotDAGException : public std::exception {
-        
+
     private:
         //indexes des sommets du cycle qui empeche le tris topologique
         const std::list<int> cycle;
-        
+
     public:
         GraphNotDAGException(const std::list<int> cycle) noexcept : exception(), cycle(cycle) {
-            
+
         }
-        
-        virtual const char* what() const noexcept {
+
+        virtual const char *what() const noexcept {
             return "Topological sort impossible : the graph is not a DAG";
         }
-        
-        const std::list<int>& Cycle() const noexcept {
+
+        const std::list<int> &Cycle() const noexcept {
             return cycle;
         }
     };
